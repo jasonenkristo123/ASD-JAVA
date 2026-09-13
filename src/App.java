@@ -8,7 +8,7 @@ public class App {
 }
 
 class ArrayListss {
-    
+
     public static void main(String[] args) {
         ArrayList<Integer> malas = new ArrayList<>();
         malas.add(1);
