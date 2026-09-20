@@ -31,7 +31,7 @@ class Node {
     Object data;
     Node next;
     Node prev;
-
+    
     public Node(Object data) {
         this.data = data;
         this.next = null;
@@ -90,21 +90,17 @@ class DDL {
         if (isEmpty()) {
             System.out.println("kosong");
             return;
-        } else if (head == tail) {
+        } else if (head.equals(tail)) {
             head = tail = null;
         } else if (head.data.equals(key)) {
             head = head.next;
-            if (head != null) {
-                head.prev = null;
-            }
+            head.prev = null;
         } else if (tail.data.equals(key)) {
             tail = tail.prev;
-            if (tail != null) {
-                tail.next = null;
-            }
+            tail.next = null;
         } else {
             Node temp = head;
-
+            
             while (temp != null && !temp.data.equals(key)) {
                 temp = temp.next;
             }
@@ -116,7 +112,6 @@ class DDL {
                 }
             } else {
                 System.out.println("No Data");
-                return;
             }
         }
         size--;
@@ -131,17 +126,16 @@ class DDL {
         Node newNode = new Node(data);
         Node temp = head;
 
-        if (head.data.equals(key)) {
+        if (head.equals(tail)) {
+            addLast(data);
+        } else if (head.data.equals(key)) { 
             newNode.next = head.next;
             if (head.next != null) {
                 head.next.prev = newNode;
-            } else {
-                tail = newNode;
             }
             head.next = newNode;
             newNode.prev = head;
-            size++;
-        } else if (tail.data.equals(key)) {
+        } else if (tail.data.equals(key)) { 
             addLast(data);
         } else {
             while (temp != null && !temp.data.equals(key)) {
@@ -153,13 +147,15 @@ class DDL {
                 temp.next.prev = newNode;
                 temp.next = newNode;
                 newNode.prev = temp;
-                size++;
-            } else if (temp != null) {
+            } else if (temp != null) { 
                 addLast(data);
+                return;
             } else {
                 System.out.println("Data Key Tidak Ditemukan");
+                return;
             }
         }
+        size++;
     }
 
     boolean search(Object key) {
@@ -175,59 +171,14 @@ class DDL {
         return false;
     }
 
-    void insertSortedByIpk(Mahasiswa mhs) {
-        Node newNode = new Node(mhs);
-
-        if (isEmpty()) {
-            head = tail = newNode;
-            size++;
-            return;
-        }
-
-        Mahasiswa headData = (Mahasiswa) head.data;
-
-        if (headData.getIpk() > mhs.getIpk()) {
-            newNode.next = head;
-            head.prev = newNode;
-            head = newNode;
-            size++;
-            return;
-        }
-
+    void display() {
         Node temp = head;
 
-        while (temp.next != null && ((Mahasiswa) temp.next.data).getIpk() < mhs.getIpk()) {
-            temp = temp.next;
-        }
-
-        newNode.next = temp.next;
-        newNode.prev = temp;
-
-        if (temp.next != null) {
-            temp.next.prev = newNode;
-        } else {
-            tail = newNode;
-        }
-
-        temp.next = newNode;
-        size++;
-    }
-
-    void displayAscending() {
-        Node temp = head;
         while (temp != null) {
             System.out.print(temp.data + " <-> ");
             temp = temp.next;
         }
-        System.out.println("null");
-    }
 
-    void displayDescending() {
-        Node temp = tail;
-        while (temp != null) {
-            System.out.print(temp.data + " <-> ");
-            temp = temp.prev;
-        }
         System.out.println("null");
     }
 }
@@ -236,18 +187,25 @@ class DDLMain {
     public static void main(String[] args) {
         DDL list = new DDL();
 
-        list.insertSortedByIpk(new Mahasiswa("2023001", "Andi", 3.2));
-        list.insertSortedByIpk(new Mahasiswa("2023002", "Budi", 3.8));
-        list.insertSortedByIpk(new Mahasiswa("2023003", "Citra", 3.5));
-        list.insertSortedByIpk(new Mahasiswa("2023004", "Diana", 4.0));
-        list.insertSortedByIpk(new Mahasiswa("2023005", "Eka", 3.0));
+        Mahasiswa mhs1 = new Mahasiswa("2023001", "Andi", 3.2);
+        Mahasiswa mhs2 = new Mahasiswa("2023002", "Budi", 3.8);
+        Mahasiswa mhs3 = new Mahasiswa("2023003", "Citra", 3.5);
+        Mahasiswa mhs4 = new Mahasiswa("2023004", "Diana", 4.0);
 
-        System.out.println("Tampilan Ascending:");
-        list.displayAscending();
+        list.addFirst(mhs1);
+        list.addLast(mhs2);
+        list.addLast(mhs4);
 
-        System.out.println("\nTampilan Descending:");
-        list.displayDescending();
+        list.insertAfter(mhs2, mhs3);
 
-        System.out.println("\nUkuran list: " + list.size());
+        System.out.println("Isi Double Linked List Mahasiswa:");
+        list.display();
+        
+        System.out.println("Ukuran list: " + list.size());
+        
+        list.delete(mhs1); 
+        System.out.println("\nSetelah mhs1 (Andi) dihapus:");
+        list.display();
+        System.out.println("Apakah mhs2 (Budi) ada di list? " + list.search(mhs2));
     }
 }
