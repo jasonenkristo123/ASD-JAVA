@@ -5,34 +5,29 @@ class NodeCDLL {
 }
 
 public class CircularDoubleLinkedList {
-    private NodeCDLL pAwal, pAkhir;
-    private int jumlah;
+    private NodeCDLL pAwal;
 
     public CircularDoubleLinkedList() {
         pAwal = null;
-        pAkhir = null;
-        jumlah = -1;
     }
 
     public void SisipDataDiAwal(Object data) {
         NodeCDLL pBaru = new NodeCDLL();
         pBaru.data = data;
-        pBaru.sebelum = pBaru;
-        pBaru.setelah = pBaru;
 
         if (pAwal == null) {
             pAwal = pBaru;
-            pAkhir = pBaru;
-            jumlah = 0;
-            pBaru.sebelum = pAkhir;
-            pBaru.setelah = pAwal;
+            pBaru.sebelum = pBaru;
+            pBaru.setelah = pBaru;
         } else {
-            pBaru.sebelum = pAkhir;
+            NodeCDLL pAkhirTemp = pAwal.sebelum; 
+            
             pBaru.setelah = pAwal;
+            pBaru.sebelum = pAkhirTemp;
+            pAkhirTemp.setelah = pBaru;
             pAwal.sebelum = pBaru;
-            pAkhir.setelah = pBaru;
-            pAwal = pBaru;
-            jumlah++;
+            
+            pAwal = pBaru; 
         }
     }
 
@@ -42,17 +37,15 @@ public class CircularDoubleLinkedList {
         
         if (pAwal == null) {
             pAwal = pBaru;
-            pAkhir = pBaru;
             pBaru.sebelum = pBaru;
             pBaru.setelah = pBaru;
-            jumlah = 0;
         } else {
-            pBaru.sebelum = pAkhir;
+            NodeCDLL pAkhirTemp = pAwal.sebelum; 
+            
+            pBaru.sebelum = pAkhirTemp;
             pBaru.setelah = pAwal;
-            pAkhir.setelah = pBaru;
+            pAkhirTemp.setelah = pBaru;
             pAwal.sebelum = pBaru;
-            pAkhir = pBaru;
-            jumlah++;
         }
     }
 
@@ -60,36 +53,25 @@ public class CircularDoubleLinkedList {
         if (pAwal != null) {
             NodeCDLL pKini = pAwal;
             boolean ketemu = false;
-            int i = 0;
 
-            while (!ketemu && (i <= jumlah)) {
+            do {
                 if (pKini.data.equals(dtHapus)) {
                     ketemu = true;
-                } else {
-                    pKini = pKini.setelah;
-                    i++;
+                    break;
                 }
-            }
+                pKini = pKini.setelah;
+            } while (pKini != pAwal);
 
             if (ketemu) {
-                if (pAwal == pAkhir) {
+                if (pKini.setelah == pKini) { 
                     pAwal = null;
-                    pAkhir = null;
-                    jumlah = -1;
-                } else if (pKini == pAwal) {
-                    pAwal = pAwal.setelah;
-                    pAwal.sebelum = pAkhir;
-                    pAkhir.setelah = pAwal;
-                    jumlah--;
-                } else if (pKini == pAkhir) {
-                    pAkhir = pAkhir.sebelum;
-                    pAkhir.setelah = pAwal;
-                    pAwal.sebelum = pAkhir;
-                    jumlah--;
                 } else {
                     pKini.sebelum.setelah = pKini.setelah;
                     pKini.setelah.sebelum = pKini.sebelum;
-                    jumlah--;
+                    
+                    if (pKini == pAwal) {
+                        pAwal = pAwal.setelah;
+                    }
                 }
             }
         }
@@ -97,38 +79,16 @@ public class CircularDoubleLinkedList {
 
     public void cetak(String Komentar) {
         System.out.println(Komentar);
-        NodeCDLL pCetak;
-        pCetak = pAwal;
-        int i = -1;
+        if (pAwal == null) {
+            System.out.println("List Kosong");
+            return;
+        }
         
-        while (i < jumlah) {
+        NodeCDLL pCetak = pAwal;
+        do {
             System.out.print(pCetak.data + "->");
             pCetak = pCetak.setelah;
-            i++;
-        }
+        } while (pCetak != pAwal);
         System.out.println();
-    }
-
-    public static void main(String[] args) {
-        CircularDoubleLinkedList cdll = new CircularDoubleLinkedList();
-        
-        cdll.SisipDataDiAwal(new Integer(50));
-        cdll.SisipDataDiAwal(new Integer(60));
-        cdll.SisipDataDiAwal(new Integer(70));
-        cdll.SisipDataDiAwal(new Integer(8));
-        cdll.SisipDataDiAwal(new Integer(9));
-        cdll.SisipDataDiAwal(new Integer(90));
-        cdll.SisipDataDiAwal(new Integer(19));
-        
-        cdll.cetak("cdll Asal");
-        
-        cdll.SisipDataDiAkhir(new Integer(99));
-        cdll.cetak("cdll stl 99 disisip di AKHIR");
-        
-        cdll.hapusData(60);
-        cdll.cetak("cdll stl 60 dihapus");
-        
-        cdll.hapusData(99);
-        cdll.cetak("cdll stl 99 dihapus");
     }
 }
