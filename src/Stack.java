@@ -83,5 +83,7 @@ class Stacks {
         stack.push(30);
         stack.display();
         stack.peek();
+        stack.pop();
+        stack.display();
     }
 }
