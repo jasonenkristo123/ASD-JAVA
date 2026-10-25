@@ -110,8 +110,7 @@ class BankQueue {
         }
         size--;
 
-        System.out.println("Melayani: " + dilayani.nomorAntrean + " - "
-                + dilayani.nama + " (" + dilayani.tipeLayanan + ")");
+        System.out.println("Melayani: " + dilayani.nomorAntrean + " - " + dilayani.nama + " (" + dilayani.tipeLayanan + ")");
         return dilayani;
     }
 
@@ -124,8 +123,7 @@ class BankQueue {
         NasabahNode curr = head;
         int no = 1;
         while (curr != null) {
-            System.out.println(no + ". " + curr.data.nomorAntrean + " - "
-                    + curr.data.nama + " (" + curr.data.tipeLayanan + ")");
+            System.out.println(no + ". " + curr.data.nomorAntrean + " - " + curr.data.nama + " (" + curr.data.tipeLayanan + ")");
             curr = curr.next;
             no++;
         }
