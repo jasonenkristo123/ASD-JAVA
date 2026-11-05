@@ -65,27 +65,31 @@ public class AVLTri {
         return rootBaru;
     }
 
-    Node rebalance(Node current, int data) {
+    Node rebalance(Node current) {
+        if (current == null) {
+            return current;
+        }
+        
         current.height = Math.max(getHeight(current.left), getHeight(current.right)) + 1;
         int balance = getBalance(current);
 
-        if (balance > 1 && data < current.left.data) {
-            return rightRotate(current);
-        } 
-        if (balance < -1 && data > current.right.data) {
-            return leftRotate(current);
-        } 
-        
-        if (balance > 1 && data > current.left.data) {
-            current.left = leftRotate(current.left);
-            return rightRotate(current);
+        if (balance > 1) {
+            if (getBalance(current.left) >= 0) {
+                return rightRotate(current);
+            } else {
+                current.left = leftRotate(current.left);
+                return rightRotate(current);
+            }
         }
 
-        if (balance < -1 && data < current.right.data) {
-            current.right = rightRotate(current.right);
-            return leftRotate(current);
+        if (balance < -1) {
+            if (getBalance(current.right) <= 0) {
+                return leftRotate(current);
+            } else {
+                current.right = rightRotate(current.right);
+                return leftRotate(current);
+            }
         }
-
         return current;
     }
 
@@ -106,7 +110,7 @@ public class AVLTri {
             return root;
         }
 
-        return rebalance(root, data);
+        return rebalance(root);
     }
     
     void delete(int data) {
@@ -138,7 +142,7 @@ public class AVLTri {
             }
         }
         
-        return rebalance(root, data);
+        return rebalance(root);
     }
 
     void inorder(Node node) {
