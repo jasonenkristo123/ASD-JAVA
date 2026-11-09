@@ -15,7 +15,7 @@ class Stack {
     }
 
     void push(int data) {
-        if (!isEmpty()) {
+        if (!isFull()) {
             stack[++top] = data; 
         } else {
             System.out.println("full mas");
@@ -61,7 +61,7 @@ class Queue {
 
     int dequeue() {
         if (isEmpty()) {
-            System.out.println("full mas");
+            System.out.println("empty mas");
             return -1;
         }
 
@@ -95,6 +95,12 @@ public class GraphMatrix {
     int vertexCount;
     Stack stack;
     Queue queue;
+
+    GraphMatrix() {
+        vertexCount = 0;
+        stack = new Stack();
+        queue = new Queue();
+    }
 
     boolean hasVertex(char label) {
         return getVertexIndex(label) != -1;
@@ -171,19 +177,18 @@ public class GraphMatrix {
     void dfs() {
         System.out.print("DFS: ");
         verticies[0].isVisited = true;
-        System.out.print(verticies[0].label + " ");
+        System.out.print(verticies[0].label + " -> ");
         stack.push(0);
 
         while (!stack.isEmpty()) {
             int curr = stack.pop();
             int next = getUnvisitedNeighbor(curr);
 
-            while (next != -1) {
+            if (next != -1) {
+                stack.push(curr);
                 verticies[next].isVisited = true;
-                System.out.println(verticies[next].label + " ");
+                System.out.print(verticies[next].label + " -> ");
                 stack.push(next);
-
-                next = getUnvisitedNeighbor(curr);
             }
         }
         System.out.println();
